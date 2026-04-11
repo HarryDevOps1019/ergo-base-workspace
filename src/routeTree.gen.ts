@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WarrantyRouteImport } from './routes/warranty'
-import { Route as TheScienceRouteImport } from './routes/the-science'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ProStationRouteImport } from './routes/pro-station'
@@ -30,11 +29,6 @@ import { Route as PainReliefTypeRouteImport } from './routes/pain-relief.$type'
 const WarrantyRoute = WarrantyRouteImport.update({
   id: '/warranty',
   path: '/warranty',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TheScienceRoute = TheScienceRouteImport.update({
-  id: '/the-science',
-  path: '/the-science',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewsRoute = ReviewsRouteImport.update({
@@ -128,7 +122,6 @@ export interface FileRoutesByFullPath {
   '/pro-station': typeof ProStationRoute
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
-  '/the-science': typeof TheScienceRoute
   '/warranty': typeof WarrantyRoute
   '/pain-relief/$type': typeof PainReliefTypeRoute
 }
@@ -147,7 +140,6 @@ export interface FileRoutesByTo {
   '/pro-station': typeof ProStationRoute
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
-  '/the-science': typeof TheScienceRoute
   '/warranty': typeof WarrantyRoute
   '/pain-relief/$type': typeof PainReliefTypeRoute
 }
@@ -167,7 +159,6 @@ export interface FileRoutesById {
   '/pro-station': typeof ProStationRoute
   '/products': typeof ProductsRoute
   '/reviews': typeof ReviewsRoute
-  '/the-science': typeof TheScienceRoute
   '/warranty': typeof WarrantyRoute
   '/pain-relief/$type': typeof PainReliefTypeRoute
 }
@@ -188,7 +179,6 @@ export interface FileRouteTypes {
     | '/pro-station'
     | '/products'
     | '/reviews'
-    | '/the-science'
     | '/warranty'
     | '/pain-relief/$type'
   fileRoutesByTo: FileRoutesByTo
@@ -207,7 +197,6 @@ export interface FileRouteTypes {
     | '/pro-station'
     | '/products'
     | '/reviews'
-    | '/the-science'
     | '/warranty'
     | '/pain-relief/$type'
   id:
@@ -226,7 +215,6 @@ export interface FileRouteTypes {
     | '/pro-station'
     | '/products'
     | '/reviews'
-    | '/the-science'
     | '/warranty'
     | '/pain-relief/$type'
   fileRoutesById: FileRoutesById
@@ -246,7 +234,6 @@ export interface RootRouteChildren {
   ProStationRoute: typeof ProStationRoute
   ProductsRoute: typeof ProductsRoute
   ReviewsRoute: typeof ReviewsRoute
-  TheScienceRoute: typeof TheScienceRoute
   WarrantyRoute: typeof WarrantyRoute
   PainReliefTypeRoute: typeof PainReliefTypeRoute
 }
@@ -258,13 +245,6 @@ declare module '@tanstack/react-router' {
       path: '/warranty'
       fullPath: '/warranty'
       preLoaderRoute: typeof WarrantyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/the-science': {
-      id: '/the-science'
-      path: '/the-science'
-      fullPath: '/the-science'
-      preLoaderRoute: typeof TheScienceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reviews': {
@@ -390,7 +370,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProStationRoute: ProStationRoute,
   ProductsRoute: ProductsRoute,
   ReviewsRoute: ReviewsRoute,
-  TheScienceRoute: TheScienceRoute,
   WarrantyRoute: WarrantyRoute,
   PainReliefTypeRoute: PainReliefTypeRoute,
 }
