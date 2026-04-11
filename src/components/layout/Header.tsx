@@ -178,7 +178,6 @@ export function Header() {
                             >
                               {child.label}
                             </a>
-                            </Link>
                           ))}
                         </div>
                       )}
