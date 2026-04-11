@@ -1,19 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroSection } from "@/components/home/HeroSection";
+import { TrustBar } from "@/components/home/TrustBar";
+import { FeaturesSection } from "@/components/home/FeaturesSection";
+import { CategorySplit } from "@/components/home/CategorySplit";
+import { ComparisonSection } from "@/components/home/ComparisonSection";
+import { ProductCards } from "@/components/home/ProductCards";
+import { PainReliefSection } from "@/components/home/PainReliefSection";
+import { SpecsChart } from "@/components/home/SpecsChart";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { ConsultBanner } from "@/components/home/ConsultBanner";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <>
+      <HeroSection />
+      <TrustBar />
+      <CategorySplit />
+      <FeaturesSection />
+      <ComparisonSection />
+      <SpecsChart />
+      <ProductCards />
+      <PainReliefSection />
+      <TestimonialsSection />
+      <ConsultBanner />
+    </>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }

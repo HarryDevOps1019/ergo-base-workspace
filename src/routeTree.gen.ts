@@ -9,38 +9,315 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WarrantyRouteImport } from './routes/warranty'
+import { Route as TheScienceRouteImport } from './routes/the-science'
+import { Route as ReviewsRouteImport } from './routes/reviews'
+import { Route as ProStationRouteImport } from './routes/pro-station'
+import { Route as ManualRouteImport } from './routes/manual'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as CustomizerRouteImport } from './routes/customizer'
+import { Route as CorporateRouteImport } from './routes/corporate'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ConsultRouteImport } from './routes/consult'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AccessoriesRouteImport } from './routes/accessories'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PainReliefTypeRouteImport } from './routes/pain-relief.$type'
 
+const WarrantyRoute = WarrantyRouteImport.update({
+  id: '/warranty',
+  path: '/warranty',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TheScienceRoute = TheScienceRouteImport.update({
+  id: '/the-science',
+  path: '/the-science',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsRoute = ReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProStationRoute = ProStationRouteImport.update({
+  id: '/pro-station',
+  path: '/pro-station',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManualRoute = ManualRouteImport.update({
+  id: '/manual',
+  path: '/manual',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomizerRoute = CustomizerRouteImport.update({
+  id: '/customizer',
+  path: '/customizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CorporateRoute = CorporateRouteImport.update({
+  id: '/corporate',
+  path: '/corporate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultRoute = ConsultRouteImport.update({
+  id: '/consult',
+  path: '/consult',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessoriesRoute = AccessoriesRouteImport.update({
+  id: '/accessories',
+  path: '/accessories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PainReliefTypeRoute = PainReliefTypeRouteImport.update({
+  id: '/pain-relief/$type',
+  path: '/pain-relief/$type',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
+  '/blog': typeof BlogRoute
+  '/consult': typeof ConsultRoute
+  '/contact': typeof ContactRoute
+  '/corporate': typeof CorporateRoute
+  '/customizer': typeof CustomizerRoute
+  '/faq': typeof FaqRoute
+  '/manual': typeof ManualRoute
+  '/pro-station': typeof ProStationRoute
+  '/reviews': typeof ReviewsRoute
+  '/the-science': typeof TheScienceRoute
+  '/warranty': typeof WarrantyRoute
+  '/pain-relief/$type': typeof PainReliefTypeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
+  '/blog': typeof BlogRoute
+  '/consult': typeof ConsultRoute
+  '/contact': typeof ContactRoute
+  '/corporate': typeof CorporateRoute
+  '/customizer': typeof CustomizerRoute
+  '/faq': typeof FaqRoute
+  '/manual': typeof ManualRoute
+  '/pro-station': typeof ProStationRoute
+  '/reviews': typeof ReviewsRoute
+  '/the-science': typeof TheScienceRoute
+  '/warranty': typeof WarrantyRoute
+  '/pain-relief/$type': typeof PainReliefTypeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
+  '/blog': typeof BlogRoute
+  '/consult': typeof ConsultRoute
+  '/contact': typeof ContactRoute
+  '/corporate': typeof CorporateRoute
+  '/customizer': typeof CustomizerRoute
+  '/faq': typeof FaqRoute
+  '/manual': typeof ManualRoute
+  '/pro-station': typeof ProStationRoute
+  '/reviews': typeof ReviewsRoute
+  '/the-science': typeof TheScienceRoute
+  '/warranty': typeof WarrantyRoute
+  '/pain-relief/$type': typeof PainReliefTypeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/accessories'
+    | '/blog'
+    | '/consult'
+    | '/contact'
+    | '/corporate'
+    | '/customizer'
+    | '/faq'
+    | '/manual'
+    | '/pro-station'
+    | '/reviews'
+    | '/the-science'
+    | '/warranty'
+    | '/pain-relief/$type'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/accessories'
+    | '/blog'
+    | '/consult'
+    | '/contact'
+    | '/corporate'
+    | '/customizer'
+    | '/faq'
+    | '/manual'
+    | '/pro-station'
+    | '/reviews'
+    | '/the-science'
+    | '/warranty'
+    | '/pain-relief/$type'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/accessories'
+    | '/blog'
+    | '/consult'
+    | '/contact'
+    | '/corporate'
+    | '/customizer'
+    | '/faq'
+    | '/manual'
+    | '/pro-station'
+    | '/reviews'
+    | '/the-science'
+    | '/warranty'
+    | '/pain-relief/$type'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AccessoriesRoute: typeof AccessoriesRoute
+  BlogRoute: typeof BlogRoute
+  ConsultRoute: typeof ConsultRoute
+  ContactRoute: typeof ContactRoute
+  CorporateRoute: typeof CorporateRoute
+  CustomizerRoute: typeof CustomizerRoute
+  FaqRoute: typeof FaqRoute
+  ManualRoute: typeof ManualRoute
+  ProStationRoute: typeof ProStationRoute
+  ReviewsRoute: typeof ReviewsRoute
+  TheScienceRoute: typeof TheScienceRoute
+  WarrantyRoute: typeof WarrantyRoute
+  PainReliefTypeRoute: typeof PainReliefTypeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/warranty': {
+      id: '/warranty'
+      path: '/warranty'
+      fullPath: '/warranty'
+      preLoaderRoute: typeof WarrantyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/the-science': {
+      id: '/the-science'
+      path: '/the-science'
+      fullPath: '/the-science'
+      preLoaderRoute: typeof TheScienceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews': {
+      id: '/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof ReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pro-station': {
+      id: '/pro-station'
+      path: '/pro-station'
+      fullPath: '/pro-station'
+      preLoaderRoute: typeof ProStationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manual': {
+      id: '/manual'
+      path: '/manual'
+      fullPath: '/manual'
+      preLoaderRoute: typeof ManualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customizer': {
+      id: '/customizer'
+      path: '/customizer'
+      fullPath: '/customizer'
+      preLoaderRoute: typeof CustomizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/corporate': {
+      id: '/corporate'
+      path: '/corporate'
+      fullPath: '/corporate'
+      preLoaderRoute: typeof CorporateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consult': {
+      id: '/consult'
+      path: '/consult'
+      fullPath: '/consult'
+      preLoaderRoute: typeof ConsultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessories': {
+      id: '/accessories'
+      path: '/accessories'
+      fullPath: '/accessories'
+      preLoaderRoute: typeof AccessoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +325,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pain-relief/$type': {
+      id: '/pain-relief/$type'
+      path: '/pain-relief/$type'
+      fullPath: '/pain-relief/$type'
+      preLoaderRoute: typeof PainReliefTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AccessoriesRoute: AccessoriesRoute,
+  BlogRoute: BlogRoute,
+  ConsultRoute: ConsultRoute,
+  ContactRoute: ContactRoute,
+  CorporateRoute: CorporateRoute,
+  CustomizerRoute: CustomizerRoute,
+  FaqRoute: FaqRoute,
+  ManualRoute: ManualRoute,
+  ProStationRoute: ProStationRoute,
+  ReviewsRoute: ReviewsRoute,
+  TheScienceRoute: TheScienceRoute,
+  WarrantyRoute: WarrantyRoute,
+  PainReliefTypeRoute: PainReliefTypeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
