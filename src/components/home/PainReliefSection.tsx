@@ -32,7 +32,7 @@ export function PainReliefSection() {
         </div>
 
         <Button variant="goldOutline" size="lg" asChild>
-          <Link to="/the-science">LEARN THE SCIENCE →</Link>
+          <Link to="/chairs">EXPLORE OUR CHAIRS →</Link>
         </Button>
       </div>
     </section>
