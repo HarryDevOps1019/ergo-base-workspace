@@ -17,10 +17,11 @@ const navItems = [
     ],
   },
   {
-    label: "THE SCIENCE",
+    label: "CHAIRS",
     children: [
-      { label: "Research & Evidence", href: "/the-science" },
-      { label: "Sit-Stand Science", href: "/the-science" },
+      { label: "All Chairs", href: "/chairs" },
+      { label: "Gaming Chairs", href: "/chairs" },
+      { label: "Office / Workstation Chairs", href: "/chairs" },
       { label: "Our Story", href: "/about" },
     ],
   },
