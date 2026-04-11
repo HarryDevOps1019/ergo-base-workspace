@@ -151,13 +151,13 @@ export function Header() {
               {navItems.map((item) => (
                 <div key={item.label}>
                   {item.href ? (
-                    <Link
-                      to={item.href}
+                    <a
+                      href={item.href}
                       className="block px-3 py-3 text-sm font-medium tracking-wider text-foreground"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {item.label}
-                    </Link>
+                    </a>
                   ) : (
                     <>
                       <button
@@ -170,13 +170,14 @@ export function Header() {
                       {openDropdown === item.label && item.children && (
                         <div className="pl-6 space-y-1">
                           {item.children.map((child) => (
-                            <Link
+                            <a
                               key={child.label}
-                              to={child.href}
+                              href={child.href}
                               className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
                               onClick={() => setMobileMenuOpen(false)}
                             >
                               {child.label}
+                            </a>
                             </Link>
                           ))}
                         </div>
