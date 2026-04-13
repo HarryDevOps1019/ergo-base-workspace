@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Filter, SlidersHorizontal, Star, ShieldCheck, Truck, X } from "lucide-react";
+import { ArrowRight, SlidersHorizontal, Star, ShieldCheck, Truck, X, ShoppingCart } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
 import productListingHero from "@/assets/product-listing-hero.jpg";
 import deskMahogany from "@/assets/desk-mahogany.jpg";
 import deskWhite from "@/assets/desk-white.jpg";
@@ -153,6 +154,8 @@ const products: Product[] = [
 function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("all");
   const [showFilters, setShowFilters] = useState(false);
+  const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const filtered = activeCategory === "all"
     ? products
@@ -290,26 +293,27 @@ function ProductsPage() {
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((product) => (
-            <Link
+            <div
               key={product.id}
-              to={product.href}
               className="group bg-surface border border-border rounded-xl overflow-hidden hover:border-gold/30 transition-all duration-500"
             >
-              <div className="relative aspect-square overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  width={800}
-                  height={800}
-                />
-                {product.badge && (
-                  <Badge className="absolute top-3 left-3 bg-gold text-gold-foreground text-[10px] tracking-wider border-none">
-                    {product.badge}
-                  </Badge>
-                )}
-              </div>
+              <Link to={product.href} className="block">
+                <div className="relative aspect-square overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    width={800}
+                    height={800}
+                  />
+                  {product.badge && (
+                    <Badge className="absolute top-3 left-3 bg-gold text-gold-foreground text-[10px] tracking-wider border-none">
+                      {product.badge}
+                    </Badge>
+                  )}
+                </div>
+              </Link>
               <div className="p-5">
                 <div className="flex items-center gap-1 mb-2">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -336,8 +340,29 @@ function ProductsPage() {
                   </div>
                 )}
                 <p className="text-lg font-bold text-gold mt-3">{product.price}</p>
+                <div className="flex gap-2 mt-3">
+                  <Button
+                    variant="gold"
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => {
+                      addItem({ id: product.id, name: product.name, subtitle: product.subtitle, price: product.priceValue, image: product.image });
+                      navigate({ to: "/checkout" });
+                    }}
+                  >
+                    BUY NOW
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => addItem({ id: product.id, name: product.name, subtitle: product.subtitle, price: product.priceValue, image: product.image })}
+                  >
+                    <ShoppingCart className="w-3.5 h-3.5 mr-1" /> ADD
+                  </Button>
+                </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
@@ -354,14 +379,8 @@ function ProductsPage() {
                 CUSTOMIZE YOURS <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
-            <Button variant="whatsapp" size="lg" asChild>
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I'm%20interested%20in%20a%20custom%20Pro%20Station.`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                INQUIRE ON WHATSAPP
-              </a>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/contact">CONTACT US</Link>
             </Button>
           </div>
         </div>

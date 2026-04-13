@@ -1,7 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Shield, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, Shield, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
 
 import heroImg from "@/assets/pro-station-hero.jpg";
 import detailMotor from "@/assets/detail-motor.jpg";
@@ -103,9 +104,20 @@ export const Route = createFileRoute("/pro-station")({
 
 function ProStationPage() {
   const [currentImage, setCurrentImage] = useState(0);
+  const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const nextImage = () => setCurrentImage((prev) => (prev + 1) % galleryImages.length);
   const prevImage = () => setCurrentImage((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+
+  const handleAddToCart = () => {
+    addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: heroImg });
+  };
+
+  const handleBuyNow = () => {
+    addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: heroImg });
+    navigate({ to: "/checkout" });
+  };
 
   return (
     <div className="bg-background text-foreground">
@@ -124,13 +136,11 @@ function ProStationPage() {
             <p className="mt-6 text-xl text-silver">Your workspace. Your rules.</p>
             <p className="mt-2 text-3xl font-bold text-gold">LKR 138,500</p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Button variant="gold" size="xl" asChild>
-                <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%20Ergo%20Base%2C%20I'm%20interested%20in%20the%20Pro%20Station%20standing%20desk.`} target="_blank" rel="noopener noreferrer">
-                  INQUIRE ON WHATSAPP
-                </a>
+              <Button variant="gold" size="xl" onClick={handleBuyNow}>
+                BUY NOW
               </Button>
-              <Button variant="outline" size="xl" asChild>
-                <Link to="/customizer">CUSTOMIZE YOURS</Link>
+              <Button variant="outline" size="xl" onClick={handleAddToCart}>
+                <ShoppingCart className="w-5 h-5 mr-2" /> ADD TO CART
               </Button>
             </div>
             <div className="mt-6 flex items-center gap-6 text-sm text-muted-foreground">
@@ -293,11 +303,14 @@ function ProStationPage() {
               <h3 className="text-xl font-bold">Standard Pro Station</h3>
               <p className="mt-2 text-sm text-muted-foreground">Same-day quote</p>
               <p className="mt-4 text-3xl font-bold text-gold">LKR 138,500</p>
-              <Button variant="whatsapp" size="lg" className="w-full mt-8" asChild>
-                <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I'd%20like%20a%20quote%20for%20the%20Standard%20Pro%20Station.`} target="_blank" rel="noopener noreferrer">
-                  INQUIRE ON WHATSAPP
-                </a>
-              </Button>
+              <div className="mt-8 space-y-3">
+                <Button variant="gold" size="lg" className="w-full" onClick={handleBuyNow}>
+                  BUY NOW
+                </Button>
+                <Button variant="outline" size="lg" className="w-full" onClick={handleAddToCart}>
+                  <ShoppingCart className="w-4 h-4 mr-2" /> ADD TO CART
+                </Button>
+              </div>
             </div>
             <div className="border-2 border-gold rounded-xl p-10 text-center bg-surface">
               <h3 className="text-xl font-bold">Custom Pro Station</h3>

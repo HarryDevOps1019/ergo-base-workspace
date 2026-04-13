@@ -1,7 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Star, ShieldCheck, Truck, ChevronRight } from "lucide-react";
+import { Star, ShieldCheck, Truck, ShoppingCart } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
 
 import chairsHero from "@/assets/chairs-hero.jpg";
 import chairGaming1 from "@/assets/chair-gaming-1.jpg";
@@ -107,6 +108,8 @@ export const Route = createFileRoute("/chairs")({
 
 function ChairsPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("all");
+  const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const filtered = activeCategory === "all" ? chairs : chairs.filter((c) => c.category === activeCategory);
 
@@ -202,23 +205,22 @@ function ChairsPage() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button variant="gold" className="flex-1" asChild>
-                    <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi, I'm interested in the ${chair.name} (LKR ${chair.price.toLocaleString()})`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Inquire Now
-                    </a>
+                  <Button
+                    variant="gold"
+                    className="flex-1"
+                    onClick={() => {
+                      addItem({ id: chair.id, name: chair.name, subtitle: chair.color, price: chair.price, image: chair.image });
+                      navigate({ to: "/checkout" });
+                    }}
+                  >
+                    Buy Now
                   </Button>
-                  <Button variant="outline" size="icon" asChild>
-                    <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`I'd like to know more about the ${chair.name}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </a>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => addItem({ id: chair.id, name: chair.name, subtitle: chair.color, price: chair.price, image: chair.image })}
+                  >
+                    <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
                   </Button>
                 </div>
               </div>
