@@ -27,7 +27,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
+  const addItem = useCallback((item: Omit<CartItem, "quantity">, openCart = true) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
@@ -35,7 +35,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...item, quantity: 1 }];
     });
-    setIsOpen(true);
+    if (openCart) setIsOpen(true);
   }, []);
 
   const removeItem = useCallback((id: string) => {
