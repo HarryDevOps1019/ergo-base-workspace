@@ -70,7 +70,7 @@ export function ProductCards() {
                     variant="gold"
                     className="flex-1"
                     onClick={() => {
-                      addItem({ id: product.id, name: product.name, subtitle: product.frame, price: product.priceValue, image: product.image });
+                      addItem({ id: product.id, name: product.name, subtitle: product.frame, price: product.priceValue, image: product.image }, false);
                       navigate({ to: "/checkout" });
                     }}
                   >
@@ -111,7 +111,7 @@ export function ProductCards() {
                 size="lg"
                 className="w-full"
                 onClick={() => {
-                  addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: deskMahogany });
+                  addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: deskMahogany }, false);
                   navigate({ to: "/checkout" });
                 }}
               >

@@ -209,7 +209,7 @@ function ChairsPage() {
                     variant="gold"
                     className="flex-1"
                     onClick={() => {
-                      addItem({ id: chair.id, name: chair.name, subtitle: chair.color, price: chair.price, image: chair.image });
+                      addItem({ id: chair.id, name: chair.name, subtitle: chair.color, price: chair.price, image: chair.image }, false);
                       navigate({ to: "/checkout" });
                     }}
                   >

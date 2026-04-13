@@ -115,7 +115,7 @@ function ProStationPage() {
   };
 
   const handleBuyNow = () => {
-    addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: heroImg });
+    addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: heroImg }, false);
     navigate({ to: "/checkout" });
   };
 

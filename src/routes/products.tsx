@@ -346,7 +346,7 @@ function ProductsPage() {
                     size="sm"
                     className="flex-1"
                     onClick={() => {
-                      addItem({ id: product.id, name: product.name, subtitle: product.subtitle, price: product.priceValue, image: product.image });
+                      addItem({ id: product.id, name: product.name, subtitle: product.subtitle, price: product.priceValue, image: product.image }, false);
                       navigate({ to: "/checkout" });
                     }}
                   >

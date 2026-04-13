@@ -6,7 +6,7 @@ export const Route = createFileRoute("/pain-relief/$type")({
 
 function PainReliefPage() {
   const { type } = Route.useParams();
-  const title = type.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const title = type.split("-").map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   
   return (
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
