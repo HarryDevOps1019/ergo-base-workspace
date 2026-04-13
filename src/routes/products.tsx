@@ -379,14 +379,8 @@ function ProductsPage() {
                 CUSTOMIZE YOURS <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
-            <Button variant="whatsapp" size="lg" asChild>
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I'm%20interested%20in%20a%20custom%20Pro%20Station.`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                INQUIRE ON WHATSAPP
-              </a>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/contact">CONTACT US</Link>
             </Button>
           </div>
         </div>
