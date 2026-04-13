@@ -2,6 +2,8 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { CartProvider } from "@/hooks/use-cart";
+import { CartDrawer } from "@/components/layout/CartDrawer";
 
 import appCss from "../styles.css?url";
 
@@ -62,13 +64,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <>
+    <CartProvider>
       <Header />
       <main>
         <Outlet />
       </main>
       <Footer />
       <WhatsAppButton />
-    </>
+      <CartDrawer />
+    </CartProvider>
   );
 }
