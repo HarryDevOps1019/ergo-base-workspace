@@ -105,11 +105,27 @@ export function ProductCards() {
             <h3 className="text-xl font-bold text-foreground mb-2">Standard Pro Station</h3>
             <p className="text-sm text-muted-foreground mb-4">Same-day Quote</p>
             <p className="text-2xl font-bold text-gold mb-6">LKR 138,500</p>
-            <Button variant="whatsapp" size="lg" className="w-full" asChild>
-              <a href="https://wa.me/94777212199?text=Hi%2C%20I'm%20interested%20in%20the%20Standard%20Pro%20Station." target="_blank" rel="noopener noreferrer">
-                INQUIRE ON WHATSAPP
-              </a>
-            </Button>
+            <div className="space-y-3">
+              <Button
+                variant="gold"
+                size="lg"
+                className="w-full"
+                onClick={() => {
+                  addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: deskMahogany });
+                  navigate({ to: "/checkout" });
+                }}
+              >
+                BUY NOW
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full"
+                onClick={() => addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: deskMahogany })}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" /> ADD TO CART
+              </Button>
+            </div>
           </div>
           <div className="bg-background border border-gold/20 rounded-xl p-8 text-center">
             <h3 className="text-xl font-bold text-foreground mb-2">Custom Pro Station</h3>
