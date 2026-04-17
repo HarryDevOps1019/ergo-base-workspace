@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Calendar, Clock, ArrowRight, Search } from "lucide-react";
 import { useState } from "react";
 
+import heroDeskImage from "@/assets/hero-desk.jpg";
+
 export const Route = createFileRoute("/blog")({
   head: () => ({
     meta: [
@@ -108,8 +110,16 @@ function BlogPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="bg-card border-b border-border py-16 md:py-20">
-        <div className="container mx-auto max-w-6xl px-4 text-center">
+      <section className="relative h-[50vh] min-h-[350px] flex items-center justify-center overflow-hidden">
+        <img
+          src={heroDeskImage}
+          alt="Ergonomics Blog"
+          className="absolute inset-0 w-full h-full object-cover"
+          width={1920}
+          height={800}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        <div className="relative z-10 text-center max-w-3xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">Ergonomics Blog</h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">Expert tips on posture, productivity, and building the perfect workspace</p>
         </div>

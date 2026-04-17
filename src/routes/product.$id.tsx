@@ -3,13 +3,20 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Star,
-  ShieldCheck,
-  Truck,
   ShoppingCart,
-  X,
   Check,
+  ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Zap,
+  Package,
+  RotateCcw,
+  Headphones,
+  Truck,
+  MapPin,
+  Minus,
+  Plus,
+  Info,
 } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 
@@ -29,8 +36,10 @@ import accessoryFootrest from "@/assets/accessory-footrest.jpg";
 import accessoryMonitorRiser from "@/assets/accessory-monitor-riser.jpg";
 
 export const Route = createFileRoute("/product/$id")({
-  component: ProductLandingPage,
+  component: ProductCustomizationPage,
 });
+
+/* ─────────────── Types ─────────────── */
 
 interface Accessory {
   id: string;
@@ -38,6 +47,28 @@ interface Accessory {
   price: number;
   image: string;
   description?: string;
+  category: "cable-management" | "lighting" | "comfort" | "power" | "other";
+}
+
+interface FrameOption {
+  id: string;
+  label: string;
+  colorHex: string;
+  priceDelta: number;
+}
+
+interface SizeOption {
+  id: string;
+  label: string;
+  dimensions: string;
+  priceDelta: number;
+}
+
+interface ChairUpgrade {
+  id: string;
+  label: string;
+  description: string;
+  priceDelta: number;
 }
 
 interface Product {
@@ -57,6 +88,8 @@ interface Product {
   color?: string;
   category: "chair" | "desk";
 }
+
+/* ─────────────── Data ─────────────── */
 
 const chairsData: Record<string, Product> = {
   "titan-pro": {
@@ -308,13 +341,38 @@ const desksData: Record<string, Product> = {
   },
 };
 
-const accessoriesData: Accessory[] = [
+/* ─── Customization Options ─── */
+
+const deskFrameOptions: FrameOption[] = [
+  { id: "black", label: "Matte Black", colorHex: "#1a1a1a", priceDelta: 0 },
+  { id: "silver", label: "Silver", colorHex: "#b0b0b0", priceDelta: 0 },
+  { id: "white", label: "White", colorHex: "#e8e8e8", priceDelta: 2500 },
+  { id: "gunmetal", label: "Gunmetal", colorHex: "#4a4a4a", priceDelta: 3500 },
+];
+
+const deskSizeOptions: SizeOption[] = [
+  { id: "standard", label: "Standard", dimensions: "160 × 80 cm", priceDelta: 0 },
+  { id: "compact", label: "Compact", dimensions: "120 × 60 cm", priceDelta: -8000 },
+  { id: "wide", label: "Wide", dimensions: "180 × 80 cm", priceDelta: 12000 },
+  { id: "xl", label: "Extra Large", dimensions: "200 × 80 cm", priceDelta: 22000 },
+];
+
+const chairUpgradeOptions: ChairUpgrade[] = [
+  { id: "headrest", label: "Premium Headrest", description: "Adjustable magnetic headrest with memory foam", priceDelta: 5500 },
+  { id: "lumbar", label: "Adaptive Lumbar", description: "Auto-adjusting lumbar system with heat function", priceDelta: 8500 },
+  { id: "armrest-4d", label: "4D Armrest Upgrade", description: "Full 4D adjustability with soft-touch pads", priceDelta: 4500 },
+  { id: "wheels", label: "Rollerblade Wheels", description: "Smooth, floor-safe polyurethane wheels", priceDelta: 3900 },
+  { id: "fabric-premium", label: "Premium Fabric", description: "Breathable micro-weave with stain resistance", priceDelta: 6500 },
+];
+
+const deskAccessories: Accessory[] = [
   {
     id: "cable-tray",
-    name: "Large Cable Tray Grove (4‒6 ft)",
+    name: "Large Cable Tray Grove (4–6 ft)",
     price: 16850,
     image: accessoryCableTray,
     description: "Organize cables and keep your workspace clean",
+    category: "cable-management",
   },
   {
     id: "pdu",
@@ -322,6 +380,7 @@ const accessoriesData: Accessory[] = [
     price: 8900,
     image: accessoryMonitorRiser,
     description: "Power management with 8 outlets",
+    category: "power",
   },
   {
     id: "table-lamp-15w",
@@ -329,6 +388,7 @@ const accessoriesData: Accessory[] = [
     price: 13900,
     image: accessoryLamp,
     description: "Warm ambient lighting for your desk",
+    category: "lighting",
   },
   {
     id: "table-lamp-24w",
@@ -336,20 +396,15 @@ const accessoriesData: Accessory[] = [
     price: 16900,
     image: accessoryLamp,
     description: "Bright focused lighting for tasks",
-  },
-  {
-    id: "caster-wheels",
-    name: "High-Quality Caster Wheels",
-    price: 3900,
-    image: accessoryMonitorRiser,
-    description: "Smooth mobility for your setup",
+    category: "lighting",
   },
   {
     id: "wireless-charger",
     name: "KPON Invisible Wireless Charger",
     price: 13900,
     image: accessoryMonitorRiser,
-    description: "Charge your devices seamlessly",
+    description: "Charge your devices seamlessly through desk surface",
+    category: "power",
   },
   {
     id: "monitor-riser-90",
@@ -357,6 +412,7 @@ const accessoriesData: Accessory[] = [
     price: 8700,
     image: accessoryMonitorRiser,
     description: "Elevated monitor viewing angle",
+    category: "comfort",
   },
   {
     id: "monitor-riser-120",
@@ -364,6 +420,7 @@ const accessoriesData: Accessory[] = [
     price: 9900,
     image: accessoryMonitorRiser,
     description: "Extra space with monitor elevation",
+    category: "comfort",
   },
   {
     id: "foot-rest",
@@ -371,6 +428,7 @@ const accessoriesData: Accessory[] = [
     price: 11800,
     image: accessoryFootrest,
     description: "Ergonomic foot support and comfort",
+    category: "comfort",
   },
   {
     id: "cup-holder",
@@ -378,10 +436,21 @@ const accessoriesData: Accessory[] = [
     price: 2900,
     image: accessoryMonitorRiser,
     description: "Keep your beverage within reach",
+    category: "other",
+  },
+  {
+    id: "caster-wheels",
+    name: "High-Quality Caster Wheels",
+    price: 3900,
+    image: accessoryMonitorRiser,
+    description: "Smooth mobility for your desk setup",
+    category: "other",
   },
 ];
 
-function ProductLandingPage() {
+/* ─────────────── Component ─────────────── */
+
+function ProductCustomizationPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const { addItem } = useCart();
@@ -393,10 +462,20 @@ function ProductLandingPage() {
   const [selectedAccessories, setSelectedAccessories] = useState<
     Record<string, boolean>
   >({});
-  const [quantity, setQuantity] = useState(1);
+  const [selectedUpgrades, setSelectedUpgrades] = useState<
+    Record<string, boolean>
+  >({});
+  const [selectedFrame, setSelectedFrame] = useState<string>(
+    product?.category === "desk" ? deskFrameOptions[0].id : ""
+  );
+  const [selectedSize, setSelectedSize] = useState<string>(
+    product?.category === "desk" ? deskSizeOptions[0].id : ""
+  );
   const [showAddedNotification, setShowAddedNotification] = useState(false);
-  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
-  const [expandAddOns, setExpandAddOns] = useState(false);
+  const [showSpecs, setShowSpecs] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [expandedAccessoryCategory, setExpandedAccessoryCategory] = useState<string | null>("cable-management");
 
   if (!product) {
     return (
@@ -411,477 +490,649 @@ function ProductLandingPage() {
     );
   }
 
-  const selectedAccessoryItems = accessoriesData.filter(
-    (a) => selectedAccessories[a.id],
-  );
-  const accessoriesTotal = selectedAccessoryItems.reduce(
-    (sum, a) => sum + a.price,
-    0,
-  );
-  const totalPrice = (product.price + accessoriesTotal) * quantity;
+  const isDesk = product.category === "desk";
 
+  /* ── Price Calculation ── */
+  const frameOption = deskFrameOptions.find((f) => f.id === selectedFrame);
+  const sizeOption = deskSizeOptions.find((s) => s.id === selectedSize);
+  const frameDelta = isDesk && frameOption ? frameOption.priceDelta : 0;
+  const sizeDelta = isDesk && sizeOption ? sizeOption.priceDelta : 0;
+
+  const upgradesTotal = Object.entries(selectedUpgrades)
+    .filter(([, v]) => v)
+    .reduce((sum, [key]) => {
+      const opt = chairUpgradeOptions.find((u) => u.id === key);
+      return sum + (opt ? opt.priceDelta : 0);
+    }, 0);
+
+  const accessoriesTotal = deskAccessories
+    .filter((a) => selectedAccessories[a.id])
+    .reduce((sum, a) => sum + a.price, 0);
+
+  const unitPrice = product.price + frameDelta + sizeDelta + upgradesTotal + accessoriesTotal;
+  const totalPrice = unitPrice * quantity;
+
+  /* ── Summary lines for cart ── */
+  const customizationSummary: string[] = [];
+  if (isDesk) {
+    if (frameOption) customizationSummary.push(`Frame: ${frameOption.label}`);
+    if (sizeOption) customizationSummary.push(`Size: ${sizeOption.dimensions}`);
+  }
+  const activeUpgrades = chairUpgradeOptions.filter((u) => selectedUpgrades[u.id]);
+  if (activeUpgrades.length > 0) customizationSummary.push(`${activeUpgrades.length} upgrade(s)`);
+  const activeAccessories = deskAccessories.filter((a) => selectedAccessories[a.id]);
+  if (activeAccessories.length > 0) customizationSummary.push(`${activeAccessories.length} add-on(s)`);
+
+  const subtitle = customizationSummary.length > 0
+    ? `${product.subtitle || product.color} • ${customizationSummary.join(" · ")}`
+    : product.subtitle || product.color;
+
+  /* ── Handlers ── */
   const handleAddToCart = () => {
-    const itemId =
-      selectedAccessoryItems.length > 0
-        ? `${product.id}-with-accessories-${Date.now()}`
-        : product.id;
-
-    const subtitle =
-      selectedAccessoryItems.length > 0
-        ? `${product.subtitle || product.name} + ${selectedAccessoryItems.length} accessories`
-        : product.subtitle || product.color;
-
-    addItem(
-      {
-        id: itemId,
-        name: product.name,
-        subtitle,
-        price: totalPrice,
-        image: product.image,
-      },
-      false,
-    );
-
+    const itemId = `${product.id}-custom-${Date.now()}`;
+    for (let i = 0; i < quantity; i++) {
+      addItem(
+        { id: i === 0 ? itemId : `${itemId}-${i}`, name: product.name, subtitle, price: unitPrice, image: product.image },
+        false,
+      );
+    }
     setShowAddedNotification(true);
-    setTimeout(() => setShowAddedNotification(false), 2000);
+    setTimeout(() => setShowAddedNotification(false), 2500);
   };
 
   const handleBuyNow = () => {
-    const itemId =
-      selectedAccessoryItems.length > 0
-        ? `${product.id}-with-accessories-${Date.now()}`
-        : product.id;
-
-    const subtitle =
-      selectedAccessoryItems.length > 0
-        ? `${product.subtitle || product.name} + ${selectedAccessoryItems.length} accessories`
-        : product.subtitle || product.color;
-
-    addItem(
-      {
-        id: itemId,
-        name: product.name,
-        subtitle,
-        price: totalPrice,
-        image: product.image,
-      },
-      false,
-    );
-
+    const itemId = `${product.id}-custom-${Date.now()}`;
+    for (let i = 0; i < quantity; i++) {
+      addItem(
+        { id: i === 0 ? itemId : `${itemId}-${i}`, name: product.name, subtitle, price: unitPrice, image: product.image },
+        false,
+      );
+    }
     navigate({ to: "/checkout" });
   };
 
-  const faqItems = [
-    {
-      id: "assembly",
-      question: "How long does assembly take?",
-      answer:
-        "Most products can be assembled in 20-30 minutes with the included tools and clear instructions. We also offer professional assembly services.",
-    },
-    {
-      id: "warranty",
-      question: "What does the warranty cover?",
-      answer:
-        "Our warranty covers manufacturing defects, structural issues, and mechanical components. It does not cover normal wear and tear or accidental damage.",
-    },
-    {
-      id: "customization",
-      question: "Can I customize the desk after purchase?",
-      answer:
-        "Yes! You can add accessories, upgrade to motorized systems, or extend the warranty at any time after purchase.",
-    },
-    {
-      id: "shipping",
-      question: "How long is shipping?",
-      answer:
-        "We offer free delivery in Colombo within 1-2 business days. Shipping to other areas takes 3-5 business days.",
-    },
-    {
-      id: "returns",
-      question: "What is your return policy?",
-      answer:
-        "We offer a 30-day return policy for unused products in original packaging. Customized items may have different terms.",
-    },
+  const nextImage = () => setSelectedImage((prev) => (prev < product.images.length - 1 ? prev + 1 : 0));
+  const prevImage = () => setSelectedImage((prev) => (prev > 0 ? prev - 1 : product.images.length - 1));
+
+  /* ── Grouped accessories ── */
+  const accessoryCategories = [
+    { key: "cable-management", label: "Cable Management" },
+    { key: "lighting", label: "Lighting" },
+    { key: "comfort", label: "Comfort & Ergonomics" },
+    { key: "power", label: "Power & Charging" },
+    { key: "other", label: "Other Accessories" },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Product Image Gallery */}
-          <div className="flex flex-col-reverse gap-4">
-            <div className="flex gap-2 overflow-x-auto pb-2">
+    <div className="min-h-screen bg-background text-foreground pb-28">
+      {/* ===== HEADER BREADCRUMB ===== */}
+      <div className="max-w-7xl mx-auto px-4 pt-6 pb-2">
+        <nav className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Link to="/" className="hover:text-gold transition-colors">Home</Link>
+          <span>/</span>
+          <Link to="/products" className="hover:text-gold transition-colors">Products</Link>
+          <span>/</span>
+          <span className="text-foreground font-medium">{product.name}</span>
+        </nav>
+      </div>
+
+      {/* ===== MAIN PRODUCT & CUSTOMIZATION ===== */}
+      <section className="max-w-7xl mx-auto px-4 pt-4 pb-8">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+
+          {/* ===== LEFT: IMAGE GALLERY ===== */}
+          <div className="flex gap-4 lg:sticky lg:top-24">
+            {/* Vertical Thumbnail Strip */}
+            <div className="flex flex-col gap-2 flex-shrink-0">
               {product.images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+                  className={`w-14 h-14 rounded-md overflow-hidden border-2 transition-all ${
                     selectedImage === idx
-                      ? "border-gold"
-                      : "border-border hover:border-gold/50"
+                      ? "border-gold ring-1 ring-gold/50"
+                      : "border-transparent hover:border-white/30 opacity-60 hover:opacity-100"
                   }`}
+                >
+                  <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+
+            {/* Main Image */}
+            <div className="flex-1 relative group">
+              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-surface">
+                <img
+                  src={product.images[selectedImage]}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </div>
+
+              {/* Navigation Arrows */}
+              {product.images.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+
+              {/* View Gallery */}
+              <button
+                onClick={() => setShowGallery(!showGallery)}
+                className="mt-3 text-gold text-sm font-medium hover:underline transition-colors flex items-center justify-center w-full gap-1"
+              >
+                View Gallery
+              </button>
+
+              {/* Key Features */}
+              <div className="mt-4 space-y-1">
+                {product.features.slice(0, 3).map((feature) => (
+                  <p key={feature} className="text-sm text-muted-foreground text-center">
+                    {feature}
+                  </p>
+                ))}
+              </div>
+
+              {/* Specifications Toggle */}
+              <button
+                onClick={() => setShowSpecs(!showSpecs)}
+                className="mt-4 text-gold text-sm font-medium hover:underline transition-colors flex items-center justify-center w-full gap-1"
+              >
+                View All Specifications
+                <ChevronDown className={`w-4 h-4 transition-transform ${showSpecs ? "rotate-180" : ""}`} />
+              </button>
+
+              {showSpecs && (
+                <div className="mt-3 p-4 bg-surface rounded-lg border border-border animate-fade-in">
+                  <div className="grid grid-cols-2 gap-3">
+                    {product.features.map((feature) => (
+                      <div key={feature} className="flex items-center gap-2 text-sm">
+                        <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {product.specs && (
+                    <div className="mt-4 pt-3 border-t border-border">
+                      {product.specs.map((spec) => (
+                        <p key={spec} className="text-sm text-muted-foreground py-1">
+                          • {spec}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ===== RIGHT: PRODUCT INFO + CUSTOMIZATION ===== */}
+          <div className="space-y-6">
+            {/* Product Title & Info */}
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold mb-1 leading-tight">
+                {product.name}
+              </h1>
+              <p className="text-muted-foreground text-sm mb-4">
+                {product.tagline}{" "}
+                <Link to="/reviews" className="text-gold hover:underline">
+                  Learn More ›
+                </Link>
+              </p>
+
+              {/* Rating */}
+              <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(product.rating) ? "text-gold fill-gold" : "text-muted-foreground"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-muted-foreground">({product.reviews})</span>
+              </div>
+
+              {/* Description */}
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {product.description}
+              </p>
+            </div>
+
+            {/* ─── CUSTOMIZATION SECTION HEADER ─── */}
+            <div className="border-t border-border pt-6">
+              <h2 className="text-lg font-bold flex items-center gap-2 mb-1">
+                <span className="w-6 h-6 rounded-full bg-gold/15 flex items-center justify-center">
+                  <Zap className="w-3.5 h-3.5 text-gold" />
+                </span>
+                Customize Your {isDesk ? "Desk" : "Chair"}
+              </h2>
+              <p className="text-xs text-muted-foreground mb-5">
+                Personalize every detail to match your setup and style.
+              </p>
+            </div>
+
+            {/* ─── DESK: FRAME COLOR ─── */}
+            {isDesk && (
+              <div className="space-y-3">
+                <label className="text-sm font-semibold block">
+                  Frame Color
+                  {frameOption && frameOption.priceDelta > 0 && (
+                    <span className="text-gold text-xs ml-2">+LKR{frameOption.priceDelta.toLocaleString()}</span>
+                  )}
+                </label>
+                <div className="flex gap-3">
+                  {deskFrameOptions.map((opt) => (
+                    <button
+                      key={opt.id}
+                      onClick={() => setSelectedFrame(opt.id)}
+                      className={`flex flex-col items-center gap-1.5 group transition-all`}
+                    >
+                      <div
+                        className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center ${
+                          selectedFrame === opt.id
+                            ? "border-gold ring-2 ring-gold/30 scale-110"
+                            : "border-border hover:border-white/40"
+                        }`}
+                        style={{ backgroundColor: opt.colorHex }}
+                      >
+                        {selectedFrame === opt.id && (
+                          <Check className="w-4 h-4 text-gold drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-[10px] font-medium transition-colors ${
+                          selectedFrame === opt.id ? "text-gold" : "text-muted-foreground group-hover:text-foreground"
+                        }`}
+                      >
+                        {opt.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ─── DESK: SIZE ─── */}
+            {isDesk && (
+              <div className="space-y-3">
+                <label className="text-sm font-semibold block">Desk Size</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {deskSizeOptions.map((opt) => (
+                    <button
+                      key={opt.id}
+                      onClick={() => setSelectedSize(opt.id)}
+                      className={`p-3 rounded-lg border text-left transition-all ${
+                        selectedSize === opt.id
+                          ? "border-gold bg-gold/5 ring-1 ring-gold/20"
+                          : "border-border hover:border-white/30 bg-surface"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold">{opt.label}</span>
+                        {selectedSize === opt.id && <Check className="w-4 h-4 text-gold" />}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">{opt.dimensions}</p>
+                      {opt.priceDelta !== 0 && (
+                        <p className={`text-[10px] mt-1 font-medium ${opt.priceDelta > 0 ? "text-gold" : "text-emerald-400"}`}>
+                          {opt.priceDelta > 0 ? "+" : ""}LKR{opt.priceDelta.toLocaleString()}
+                        </p>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ─── CHAIR: UPGRADES ─── */}
+            {!isDesk && (
+              <div className="space-y-3">
+                <label className="text-sm font-semibold block">Upgrades & Enhancements</label>
+                <div className="space-y-2">
+                  {chairUpgradeOptions.map((opt) => (
+                    <button
+                      key={opt.id}
+                      onClick={() =>
+                        setSelectedUpgrades((prev) => ({ ...prev, [opt.id]: !prev[opt.id] }))
+                      }
+                      className={`w-full flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${
+                        selectedUpgrades[opt.id]
+                          ? "border-gold bg-gold/5"
+                          : "border-border hover:border-white/30 bg-surface"
+                      }`}
+                    >
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                          selectedUpgrades[opt.id]
+                            ? "border-gold bg-gold"
+                            : "border-muted-foreground"
+                        }`}
+                      >
+                        {selectedUpgrades[opt.id] && (
+                          <Check className="w-3 h-3 text-gold-foreground" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold">{opt.label}</h4>
+                        <p className="text-xs text-muted-foreground">{opt.description}</p>
+                      </div>
+                      <span className="text-xs font-bold text-gold flex-shrink-0">
+                        +LKR{opt.priceDelta.toLocaleString()}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ─── ADD-ONS (for desks) ─── */}
+            {isDesk && (
+              <div className="space-y-3 border-t border-border pt-6">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold">Add-Ons & Accessories</label>
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <Info className="w-3 h-3" /> Select items to bundle
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  {accessoryCategories.map((cat) => {
+                    const items = deskAccessories.filter((a) => a.category === cat.key);
+                    if (items.length === 0) return null;
+                    const isExpanded = expandedAccessoryCategory === cat.key;
+                    const selectedCount = items.filter((a) => selectedAccessories[a.id]).length;
+
+                    return (
+                      <div key={cat.key} className="rounded-lg border border-border overflow-hidden">
+                        <button
+                          onClick={() =>
+                            setExpandedAccessoryCategory(isExpanded ? null : cat.key)
+                          }
+                          className="w-full flex items-center justify-between p-3 hover:bg-surface/50 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium">{cat.label}</span>
+                            {selectedCount > 0 && (
+                              <span className="text-[10px] bg-gold/15 text-gold px-2 py-0.5 rounded-full font-semibold">
+                                {selectedCount} selected
+                              </span>
+                            )}
+                          </div>
+                          <ChevronDown
+                            className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                          />
+                        </button>
+
+                        {isExpanded && (
+                          <div className="px-3 pb-3 space-y-2 animate-fade-in">
+                            {items.map((accessory) => (
+                              <button
+                                key={accessory.id}
+                                onClick={() =>
+                                  setSelectedAccessories((prev) => ({
+                                    ...prev,
+                                    [accessory.id]: !prev[accessory.id],
+                                  }))
+                                }
+                                className={`w-full flex items-center gap-3 p-2.5 rounded-lg border text-left transition-all ${
+                                  selectedAccessories[accessory.id]
+                                    ? "border-gold bg-gold/5"
+                                    : "border-border/50 hover:border-white/20 bg-surface/30"
+                                }`}
+                              >
+                                <div className="w-10 h-10 rounded-md overflow-hidden flex-shrink-0 bg-foreground/5">
+                                  <img
+                                    src={accessory.image}
+                                    alt={accessory.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-xs font-semibold leading-tight line-clamp-1">
+                                    {accessory.name}
+                                  </h4>
+                                  <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                    {accessory.description}
+                                  </p>
+                                </div>
+                                <div className="text-right flex-shrink-0 flex items-center gap-2">
+                                  <p className="text-xs font-bold">
+                                    LKR{accessory.price.toLocaleString()}
+                                  </p>
+                                  {selectedAccessories[accessory.id] && (
+                                    <Check className="w-4 h-4 text-gold" />
+                                  )}
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* ─── QUANTITY ─── */}
+            <div className="space-y-3 border-t border-border pt-6">
+              <label className="text-sm font-semibold block">Quantity</label>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="w-9 h-9 rounded-lg border border-border flex items-center justify-center hover:border-gold transition-colors"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-10 text-center font-bold text-lg">{quantity}</span>
+                <button
+                  onClick={() => setQuantity((q) => Math.min(10, q + 1))}
+                  className="w-9 h-9 rounded-lg border border-border flex items-center justify-center hover:border-gold transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* ─── YOUR CONFIGURATION SUMMARY ─── */}
+            <div className="rounded-xl border border-border bg-surface/50 p-5 space-y-3">
+              <h3 className="text-sm font-bold text-gold">Your Configuration</h3>
+              <div className="space-y-1.5 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Base — {product.name}</span>
+                  <span className="font-medium">LKR{product.price.toLocaleString()}</span>
+                </div>
+                {isDesk && frameOption && frameOption.priceDelta > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Frame: {frameOption.label}</span>
+                    <span className="text-gold font-medium">+LKR{frameOption.priceDelta.toLocaleString()}</span>
+                  </div>
+                )}
+                {isDesk && sizeOption && sizeOption.priceDelta !== 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Size: {sizeOption.label} ({sizeOption.dimensions})</span>
+                    <span className={`font-medium ${sizeOption.priceDelta > 0 ? "text-gold" : "text-emerald-400"}`}>
+                      {sizeOption.priceDelta > 0 ? "+" : ""}LKR{sizeOption.priceDelta.toLocaleString()}
+                    </span>
+                  </div>
+                )}
+                {activeUpgrades.map((u) => (
+                  <div key={u.id} className="flex justify-between">
+                    <span className="text-muted-foreground">{u.label}</span>
+                    <span className="text-gold font-medium">+LKR{u.priceDelta.toLocaleString()}</span>
+                  </div>
+                ))}
+                {activeAccessories.map((a) => (
+                  <div key={a.id} className="flex justify-between">
+                    <span className="text-muted-foreground">{a.name}</span>
+                    <span className="font-medium">+LKR{a.price.toLocaleString()}</span>
+                  </div>
+                ))}
+                {quantity > 1 && (
+                  <div className="flex justify-between pt-1 text-muted-foreground">
+                    <span>× {quantity}</span>
+                    <span></span>
+                  </div>
+                )}
+                <div className="flex justify-between pt-2 border-t border-border text-sm font-bold">
+                  <span>Total</span>
+                  <span>LKR{totalPrice.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ─── TRUST BADGES ─── */}
+            <div className="flex items-center justify-start gap-8 py-4">
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center">
+                  <Package className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <span className="text-[10px] text-muted-foreground leading-tight">
+                  Next Business<br />Day Shipping
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center">
+                  <RotateCcw className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <span className="text-[10px] text-muted-foreground leading-tight">
+                  Risk Free<br />Return
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center">
+                  <Headphones className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <span className="text-[10px] text-muted-foreground leading-tight">
+                  Comprehensive<br />Customer Support
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== GALLERY OVERLAY ===== */}
+      {showGallery && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-8"
+          onClick={() => setShowGallery(false)}
+        >
+          <div className="max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Product Gallery</h3>
+              <button
+                onClick={() => setShowGallery(false)}
+                className="text-muted-foreground hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {product.images.map((img, idx) => (
+                <div
+                  key={idx}
+                  className="aspect-square rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-gold transition-all"
+                  onClick={() => {
+                    setSelectedImage(idx);
+                    setShowGallery(false);
+                  }}
                 >
                   <img
                     src={img}
-                    alt={`View ${idx + 1}`}
-                    className="w-full h-full object-cover"
+                    alt={`Gallery ${idx + 1}`}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform"
                   />
-                </button>
+                </div>
               ))}
             </div>
-            <div className="aspect-square rounded-2xl overflow-hidden bg-surface border border-border">
-              <img
-                src={product.images[selectedImage]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
           </div>
+        </div>
+      )}
 
-          {/* Product Info */}
-          <div>
-            <p className="text-gold text-xs tracking-widest mb-2 uppercase">
-              {product.category === "chair"
-                ? "ergonomic chair"
-                : "standing desk"}
-            </p>
-            <h1 className="text-5xl font-bold mb-3">{product.name}</h1>
-            {product.tagline && (
-              <p className="text-xl text-muted-foreground mb-4">
-                {product.tagline}
-              </p>
-            )}
-
-            {/* Rating */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-5 h-5 ${
-                      i < Math.floor(product.rating)
-                        ? "text-gold fill-gold"
-                        : "text-muted-foreground"
-                    }`}
-                  />
-                ))}
+      {/* ===== STICKY BOTTOM BAR ===== */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
+            {/* Left: Delivery */}
+            <div className="hidden md:flex items-center gap-6 text-xs">
+              <div className="border-l border-border pl-4">
+                <div className="flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-muted-foreground">
+                      <span className="font-semibold text-foreground">Order now,</span> delivered by:
+                    </p>
+                    <p className="text-foreground font-medium">2-3 Business Days</p>
+                    <button className="text-gold hover:underline text-[10px] mt-0.5">
+                      View Delivery Options
+                    </button>
+                  </div>
+                </div>
               </div>
-              <span className="text-sm text-muted-foreground">
-                {product.rating} ({product.reviews} reviews)
-              </span>
+
+              <div className="border-l border-border pl-4">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-muted-foreground">
+                      <span className="font-semibold text-foreground">Pickup</span> available
+                    </p>
+                    <p className="text-foreground font-medium">Colombo Showroom</p>
+                    <button className="text-gold hover:underline text-[10px] mt-0.5">
+                      View Location
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Price */}
-            <div className="mb-8 p-6 bg-surface rounded-xl border border-gold/20">
-              <p className="text-sm text-muted-foreground mb-3">Starting at</p>
-              <div className="flex items-baseline gap-3 mb-4">
-                <span className="text-5xl font-bold text-gold">
-                  LKR {product.price.toLocaleString()}
-                </span>
+            {/* Right: Price + Buttons */}
+            <div className="flex items-center gap-4 ml-auto">
+              <div className="text-right">
+                <p className="text-2xl lg:text-3xl font-bold">LKR{totalPrice.toLocaleString()}</p>
+                {(activeAccessories.length > 0 || activeUpgrades.length > 0) && (
+                  <p className="text-[10px] text-gold">
+                    Customized configuration
+                  </p>
+                )}
                 {product.originalPrice && (
-                  <span className="text-lg text-muted-foreground line-through">
-                    LKR {product.originalPrice.toLocaleString()}
-                  </span>
+                  <p className="text-xs text-muted-foreground line-through">
+                    LKR{product.originalPrice.toLocaleString()}
+                  </p>
                 )}
               </div>
-              {product.originalPrice && (
-                <p className="text-sm text-gold font-semibold">
-                  Save LKR{" "}
-                  {(product.originalPrice - product.price).toLocaleString()}
-                </p>
-              )}
-            </div>
 
-            {/* Description */}
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              {product.description}
-            </p>
-
-            {/* Quick Features */}
-            <div className="mb-8 grid grid-cols-2 gap-3">
-              {product.features.slice(0, 4).map((feature) => (
-                <div key={feature} className="flex items-center gap-2 text-sm">
-                  <Check className="w-4 h-4 text-gold flex-shrink-0" />
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Add-ons Section - Card Grid */}
-            <div className="mb-8">
-              <p className="text-xs text-muted-foreground mb-6 tracking-widest uppercase">
-                Add-ons
-              </p>
-              <div className="grid md:grid-cols-2 gap-3">
-                {accessoriesData
-                  .slice(0, expandAddOns ? accessoriesData.length : 2)
-                  .map((accessory) => (
-                    <button
-                      key={accessory.id}
-                      onClick={() =>
-                        setSelectedAccessories((prev) => ({
-                          ...prev,
-                          [accessory.id]: !prev[accessory.id],
-                        }))
-                      }
-                      className={`p-3 rounded-lg border-2 transition-all text-left group ${
-                        selectedAccessories[accessory.id]
-                          ? "border-gold bg-gold/10"
-                          : "border-border hover:border-gold/50 bg-surface"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        {/* Image */}
-                        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-foreground/5">
-                          <img
-                            src={accessory.image}
-                            alt={accessory.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                          />
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-sm">
-                            {accessory.name}
-                          </h3>
-                        </div>
-
-                        {/* Price */}
-                        <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-bold text-gold">
-                            {accessory.price.toLocaleString()}
-                          </p>
-                          {selectedAccessories[accessory.id] && (
-                            <div className="mt-1">
-                              <Check className="w-4 h-4 text-gold" />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-              </div>
-
-              {!expandAddOns && accessoriesData.length > 2 && (
-                <button
-                  onClick={() => setExpandAddOns(true)}
-                  className="mt-4 w-full py-2 text-gold font-semibold hover:text-gold/80 transition-colors flex items-center justify-center gap-2"
-                >
-                  See More <ChevronRight className="w-4 h-4" />
-                </button>
-              )}
-
-              {expandAddOns && accessoriesData.length > 2 && (
-                <button
-                  onClick={() => setExpandAddOns(false)}
-                  className="mt-4 w-full py-2 text-gold font-semibold hover:text-gold/80 transition-colors flex items-center justify-center gap-2"
-                >
-                  See Less <ChevronRight className="w-4 h-4 rotate-90" />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Order Summary Section - Centered */}
-      <section className="w-full px-4 py-12 bg-surface border-t border-b border-gold/20">
-        <div className="max-w-7xl mx-auto p-8 bg-surface rounded-2xl border border-gold/20">
-          <div className="space-y-3 pb-6">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">{product.name}</span>
-              <span className="font-semibold">
-                LKR {product.price.toLocaleString()}
-              </span>
-            </div>
-
-            {selectedAccessoryItems.map((accessory) => (
-              <div key={accessory.id} className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  + {accessory.name}
-                </span>
-                <span className="font-semibold">
-                  LKR {accessory.price.toLocaleString()}
-                </span>
-              </div>
-            ))}
-
-            <div className="flex justify-between pt-2 border-t border-border">
-              <span className="text-muted-foreground">Quantity</span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-6 h-6 rounded border border-border hover:bg-accent transition-colors"
-                >
-                  −
-                </button>
-                <span className="w-6 text-center font-semibold">
-                  {quantity}
-                </span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-6 h-6 rounded border border-border hover:bg-accent transition-colors"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="my-6 py-4 border-t border-border">
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold">Total:</span>
-              <span className="text-4xl font-bold text-gold">
-                LKR {totalPrice.toLocaleString()}
-              </span>
-            </div>
-          </div>
-
-          {selectedAccessoryItems.length > 0 && (
-            <p className="text-xs text-muted-foreground mb-6">
-              ✓ {selectedAccessoryItems.length} accessories included
-            </p>
-          )}
-
-          <div className="flex flex-col sm:flex-row gap-3 mb-8">
-            <Button
-              variant="gold"
-              size="lg"
-              className="flex-1"
-              onClick={handleBuyNow}
-            >
-              BUY NOW
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="flex-1"
-              onClick={handleAddToCart}
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" /> ADD TO CART
-            </Button>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="space-y-3 pt-6 border-t border-border">
-            <div className="flex items-center gap-3 text-sm">
-              <Truck className="w-5 h-5 text-gold" />
-              <span>Free Delivery in Colombo</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm">
-              <ShieldCheck className="w-5 h-5 text-gold" />
-              <span>3-5 Year Warranty</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm">
-              <Zap className="w-5 h-5 text-gold" />
-              <span>Easy Installation Support</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="bg-surface border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <h2 className="text-3xl font-bold mb-12">Features at a Glance</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {product.features.map((feature, idx) => (
-              <div key={idx} className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-5 h-5 text-gold" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">{feature}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Premium quality and durability built in.
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Specifications Section */}
-      <section className="bg-surface border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          <h2 className="text-3xl font-bold mb-12">Specifications</h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Technical Specs</h3>
-              {product.specs && (
-                <ul className="space-y-3">
-                  {product.specs.map((spec) => (
-                    <li key={spec} className="flex items-start gap-3 text-sm">
-                      <span className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0"></span>
-                      {spec}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-4">Additional Info</h3>
-              <ul className="space-y-3 text-sm text-muted-foreground">
-                <li className="flex items-start gap-3">
-                  <span className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0"></span>
-                  Easy assembly with included tools and instructions
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0"></span>
-                  Comprehensive warranty coverage included
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0"></span>
-                  24/7 customer support available
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-2 h-2 rounded-full bg-gold mt-2 flex-shrink-0"></span>
-                  Compatible with standard accessories
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold mb-12">Frequently Asked Questions</h2>
-        <div className="space-y-4">
-          {faqItems.map((item) => (
-            <div
-              key={item.id}
-              className="border border-border rounded-lg overflow-hidden bg-surface hover:border-gold/30 transition-colors"
-            >
-              <button
-                onClick={() =>
-                  setExpandedFaq(expandedFaq === item.id ? null : item.id)
-                }
-                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-foreground/5 transition-colors"
+              <Button
+                variant="gold"
+                size="lg"
+                className="px-8 h-12 text-sm font-bold tracking-wide"
+                onClick={handleAddToCart}
               >
-                <h3 className="font-semibold">{item.question}</h3>
-                <ChevronRight
-                  className={`w-5 h-5 text-gold transition-transform ${
-                    expandedFaq === item.id ? "rotate-90" : ""
-                  }`}
-                />
-              </button>
-              {expandedFaq === item.id && (
-                <div className="px-6 py-4 border-t border-border bg-foreground/5 text-sm text-muted-foreground">
-                  {item.answer}
-                </div>
-              )}
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                ADD TO CART
+              </Button>
             </div>
-          ))}
+          </div>
         </div>
-      </section>
+      </div>
 
       {/* Success Notification */}
       {showAddedNotification && (
-        <div className="fixed bottom-4 right-4 bg-gold text-gold-foreground px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-24 right-4 z-50 bg-gold text-gold-foreground px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
           <Check className="w-4 h-4" />
           <span>Added to cart!</span>
         </div>

@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from "lucide-react";
 
+import proStationHero from "@/assets/pro-station-hero.jpg";
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
@@ -37,8 +39,16 @@ function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="bg-card border-b border-border py-16 md:py-20">
-        <div className="container mx-auto max-w-4xl px-4 text-center">
+      <section className="relative h-[50vh] min-h-[350px] flex items-center justify-center overflow-hidden">
+        <img
+          src={proStationHero}
+          alt="Contact Us"
+          className="absolute inset-0 w-full h-full object-cover"
+          width={1920}
+          height={800}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">Contact Us</h1>
           <p className="mt-4 text-lg text-muted-foreground">We'd love to hear from you. Reach out anytime.</p>
         </div>

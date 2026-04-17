@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Star, ThumbsUp, Quote } from "lucide-react";
 import { useState } from "react";
 
+import productListingHero from "@/assets/product-listing-hero.jpg";
+
 import fullSetup2 from "@/assets/review/full setup2.jpg";
 import fullSetup from "@/assets/review/fullsetup.jpg";
 import gamingDesk from "@/assets/review/gamingdesk.jpg";
@@ -235,8 +237,16 @@ function ReviewsPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="bg-card border-b border-border py-16 md:py-24">
-        <div className="container mx-auto max-w-6xl px-4 text-center">
+      <section className="relative h-[50vh] min-h-[350px] flex items-center justify-center overflow-hidden">
+        <img
+          src={productListingHero}
+          alt="Customer Reviews"
+          className="absolute inset-0 w-full h-full object-cover"
+          width={1920}
+          height={800}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        <div className="relative z-10 text-center max-w-3xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
             Customer Reviews
           </h1>
@@ -244,8 +254,13 @@ function ReviewsPage() {
             Real feedback from verified Ergo Base customers across Sri Lanka
           </p>
 
+        </div>
+      </section>
+
+      <section className="bg-card">
+        <div className="container mx-auto max-w-6xl px-4 py-8">
           {/* Rating Summary */}
-          <div className="mt-10 flex flex-col md:flex-row items-center justify-center gap-10">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-10">
             <div className="text-center">
               <div className="text-6xl font-bold text-foreground">{avgRating}</div>
               <StarRating rating={Math.round(Number(avgRating))} size={24} />
