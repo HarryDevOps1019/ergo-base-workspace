@@ -8,7 +8,7 @@ import deskTeak from "@/assets/desk-teak.jpg";
 
 const products = [
   {
-    id: "pro-mahogany",
+    id: "mahogany-black",
     name: "Pro Station — Mahogany Top",
     frame: "Standard Black Frame",
     price: "LKR 138,500",
@@ -16,7 +16,7 @@ const products = [
     image: deskMahogany,
   },
   {
-    id: "pro-mdf-white",
+    id: "mdf-white-silver",
     name: "Pro Station — MDF White Top",
     frame: "Silver Frame",
     price: "LKR 138,500",
@@ -24,7 +24,7 @@ const products = [
     image: deskWhite,
   },
   {
-    id: "pro-teak",
+    id: "teak-custom",
     name: "Pro Station — Teak Top",
     frame: "Custom Size Available",
     price: "LKR 138,500",
@@ -70,8 +70,7 @@ export function ProductCards() {
                     variant="gold"
                     className="flex-1"
                     onClick={() => {
-                      addItem({ id: product.id, name: product.name, subtitle: product.frame, price: product.priceValue, image: product.image }, false);
-                      navigate({ to: "/checkout" });
+                      navigate({ to: `/product/${product.id}` });
                     }}
                   >
                     BUY NOW
@@ -89,15 +88,7 @@ export function ProductCards() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <Link
-            to="/customizer"
-            className="inline-flex items-center gap-2 text-gold hover:text-gold/80 font-semibold tracking-wider text-sm transition-colors"
-          >
-            NOT SEEING WHAT YOU WANT? CUSTOMIZE YOURS
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+
 
         {/* Two Config Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
@@ -111,8 +102,7 @@ export function ProductCards() {
                 size="lg"
                 className="w-full"
                 onClick={() => {
-                  addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: deskMahogany }, false);
-                  navigate({ to: "/checkout" });
+                  navigate({ to: "/product/mahogany-black" });
                 }}
               >
                 BUY NOW
@@ -127,14 +117,7 @@ export function ProductCards() {
               </Button>
             </div>
           </div>
-          <div className="bg-background border border-gold/20 rounded-xl p-8 text-center">
-            <h3 className="text-xl font-bold text-foreground mb-2">Custom Pro Station</h3>
-            <p className="text-sm text-muted-foreground mb-4">Built to Your Specs</p>
-            <p className="text-2xl font-bold text-gold mb-6">Starting at 138,500</p>
-            <Button variant="goldOutline" size="lg" className="w-full" asChild>
-              <Link to="/customizer">CUSTOMIZE YOURS →</Link>
-            </Button>
-          </div>
+
         </div>
       </div>
     </section>

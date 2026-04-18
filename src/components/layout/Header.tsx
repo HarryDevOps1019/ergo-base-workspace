@@ -15,7 +15,6 @@ const navItems = [
       { label: "Corporate Solutions", href: "/corporate" },
       { label: "Shop All", href: "/products" },
       { label: "Accessories & Add-Ons", href: "/accessories" },
-      { label: "Customization Studio", href: "/customizer" },
     ],
   },
   {
@@ -24,7 +23,6 @@ const navItems = [
       { label: "All Chairs", href: "/chairs" },
       { label: "Gaming Chairs", href: "/chairs" },
       { label: "Office / Workstation Chairs", href: "/chairs" },
-      { label: "Our Story", href: "/about" },
     ],
   },
   { label: "REVIEWS", href: "/reviews" },
@@ -36,6 +34,7 @@ const navItems = [
       { label: "User Manual", href: "/manual" },
       { label: "Warranty", href: "/warranty" },
       { label: "Contact Us", href: "/contact" },
+      { label: "Our Story", href: "/about" },
     ],
   },
 ];
