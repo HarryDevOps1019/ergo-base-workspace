@@ -87,38 +87,6 @@ export function ProductCards() {
             </div>
           ))}
         </div>
-
-
-
-        {/* Two Config Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-          <div className="bg-background border border-border rounded-xl p-8 text-center">
-            <h3 className="text-xl font-bold text-foreground mb-2">Standard Pro Station</h3>
-            <p className="text-sm text-muted-foreground mb-4">Same-day Quote</p>
-            <p className="text-2xl font-bold text-gold mb-6">LKR 138,500</p>
-            <div className="space-y-3">
-              <Button
-                variant="gold"
-                size="lg"
-                className="w-full"
-                onClick={() => {
-                  navigate({ to: "/product/mahogany-black" });
-                }}
-              >
-                BUY NOW
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full"
-                onClick={() => addItem({ id: "pro-station-standard", name: "Pro Station — Standard", subtitle: "Dual Motor Standing Desk", price: 138500, image: deskMahogany })}
-              >
-                <ShoppingCart className="w-4 h-4 mr-2" /> ADD TO CART
-              </Button>
-            </div>
-          </div>
-
-        </div>
       </div>
     </section>
   );

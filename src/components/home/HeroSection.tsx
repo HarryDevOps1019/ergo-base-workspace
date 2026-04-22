@@ -1,21 +1,36 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import heroImage from "@/assets/hero-desk.jpg";
+import landingBg from "@/assets/video/landingbg.mp4";
 
 export function HeroSection() {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Pro Station Standing Desk in a modern dark office"
-          className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
+      {!isVideoPlaying ? (
+        // Background image (default)
+        <div className="absolute inset-0">
+          <img
+            src={heroImage}
+            alt="Pro Station Standing Desk in a modern dark office"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
+        </div>
+      ) : (
+        // Video when playing
+        <video
+          src={landingBg}
+          autoPlay
+          muted
+          loop
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
-      </div>
+      )}
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
@@ -39,7 +54,11 @@ export function HeroSection() {
           <Button variant="gold" size="xl" asChild>
             <Link to="/pro-station">SHOP NOW</Link>
           </Button>
-          <Button variant="outline" size="xl">
+          <Button 
+            variant="outline" 
+            size="xl"
+            onClick={() => setIsVideoPlaying(true)}
+          >
             WATCH THE VIDEO
           </Button>
         </div>

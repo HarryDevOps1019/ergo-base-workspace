@@ -17,10 +17,6 @@ import deskMahogany from "@/assets/desk-mahogany.jpg";
 import deskWhite from "@/assets/desk-white.jpg";
 import deskTeak from "@/assets/desk-teak.jpg";
 import productMdfWhite from "@/assets/product-mdf-white.jpg";
-import accessoryCableTray from "@/assets/accessory-cable-tray.jpg";
-import accessoryLamp from "@/assets/accessory-lamp.jpg";
-import accessoryFootrest from "@/assets/accessory-footrest.jpg";
-import accessoryMonitorRiser from "@/assets/accessory-monitor-riser.jpg";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -29,13 +25,13 @@ export const Route = createFileRoute("/products")({
       {
         name: "description",
         content:
-          "Browse the full Ergo Base collection: Pro Station standing desks in Mahogany, Teak & MDF, plus ergonomic accessories. All desks LKR 138,500 — any size, any wood.",
+          "Browse the full Ergo Base collection: Pro Station standing desks in Mahogany, Teak & MDF. All desks LKR 138,500 — any size, any wood.",
       },
       { property: "og:title", content: "Shop All — Ergo Base Pro Station" },
       {
         property: "og:description",
         content:
-          "Browse Pro Station standing desks and ergonomic accessories. Custom sizes, premium woods, same price.",
+          "Browse Pro Station standing desks. Custom sizes, premium woods, same price.",
       },
     ],
   }),
@@ -44,7 +40,7 @@ export const Route = createFileRoute("/products")({
 
 const WHATSAPP_NUMBER = "94777212199";
 
-type Category = "all" | "desks" | "accessories";
+type Category = "all" | "desks";
 
 interface Product {
   id: string;
@@ -53,7 +49,7 @@ interface Product {
   price: string;
   priceValue: number;
   image: string;
-  category: "desks" | "accessories";
+  category: "desks";
   badge?: string;
   rating: number;
   reviews: number;
@@ -117,54 +113,6 @@ const products: Product[] = [
     specs: ["Dual Motor", "120kg Capacity", "5-Year Warranty"],
     href: "/pro-station",
   },
-  {
-    id: "cable-tray",
-    name: "Cable Tray Grove",
-    subtitle: "Large — 4 to 6 ft",
-    price: "LKR 16,850",
-    priceValue: 16850,
-    image: accessoryCableTray,
-    category: "accessories",
-    rating: 4.8,
-    reviews: 23,
-    href: "/accessories",
-  },
-  {
-    id: "desk-lamp-15w",
-    name: "LED Desk Lamp — 15W",
-    subtitle: "Adjustable Arm • Warm Light",
-    price: "LKR 13,900",
-    priceValue: 13900,
-    image: accessoryLamp,
-    category: "accessories",
-    rating: 4.6,
-    reviews: 19,
-    href: "/accessories",
-  },
-  {
-    id: "footrest",
-    name: "Ergonomic Foot Rest",
-    subtitle: "Tilting Platform • Anti-Fatigue",
-    price: "LKR 11,800",
-    priceValue: 11800,
-    image: accessoryFootrest,
-    category: "accessories",
-    rating: 4.9,
-    reviews: 28,
-    href: "/accessories",
-  },
-  {
-    id: "monitor-riser-90",
-    name: "Monitor Riser Stand — 90cm",
-    subtitle: "Solid Wood • Elevated Platform",
-    price: "LKR 8,700",
-    priceValue: 8700,
-    image: accessoryMonitorRiser,
-    category: "accessories",
-    rating: 4.7,
-    reviews: 15,
-    href: "/accessories",
-  },
 ];
 
 function ProductsPage() {
@@ -179,9 +127,6 @@ function ProductsPage() {
       : products.filter((p) => p.category === activeCategory);
 
   const deskCount = products.filter((p) => p.category === "desks").length;
-  const accessoryCount = products.filter(
-    (p) => p.category === "accessories",
-  ).length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -200,7 +145,7 @@ function ProductsPage() {
             SHOP ALL
           </h1>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-            Pro Station standing desks and ergonomic accessories — everything
+            Pro Station standing desks — everything
             you need for the perfect workspace.
           </p>
         </div>
@@ -246,16 +191,6 @@ function ProductsPage() {
               }`}
             >
               DESKS ({deskCount})
-            </button>
-            <button
-              onClick={() => setActiveCategory("accessories")}
-              className={`px-4 py-2 text-sm font-medium tracking-wider rounded-full transition-colors cursor-pointer ${
-                activeCategory === "accessories"
-                  ? "bg-gold text-gold-foreground"
-                  : "bg-surface text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              ACCESSORIES ({accessoryCount})
             </button>
           </div>
           <div className="flex items-center gap-2">
@@ -451,45 +386,6 @@ function ProductsPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Custom CTA */}
-        <div className="mt-16 bg-surface border border-gold/20 rounded-xl p-8 sm:p-12 text-center">
-          <h2 className="text-xs tracking-[0.3em] text-gold font-semibold mb-3">
-            CAN'T FIND WHAT YOU NEED?
-          </h2>
-          <p className="text-2xl sm:text-3xl font-bold text-foreground mb-3">
-            Design Your Own Pro Station
-          </p>
-          <p className="text-muted-foreground max-w-lg mx-auto mb-8">
-            Any size. Any wood. Any color. Same price — LKR 138,500. Use our
-            Customization Studio to build exactly what you need.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="gold" size="lg" asChild>
-              <Link to="/customizer">
-                CUSTOMIZE YOURS <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link to="/contact">CONTACT US</Link>
-            </Button>
-          </div>
-        </div>
-
-        {/* Corporate */}
-        <div className="mt-8 bg-background border border-border rounded-xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-2">
-              Need Multiple Desks?
-            </h3>
-            <p className="text-muted-foreground">
-              Bulk pricing and installation support for offices of any size.
-            </p>
-          </div>
-          <Button variant="goldOutline" size="lg" asChild>
-            <Link to="/corporate">GET CORPORATE QUOTE</Link>
-          </Button>
         </div>
       </section>
     </div>

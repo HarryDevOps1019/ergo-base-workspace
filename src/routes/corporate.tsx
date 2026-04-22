@@ -19,6 +19,9 @@ import { useCart } from "@/hooks/use-cart";
 import deskMahogany from "@/assets/desk-mahogany.jpg";
 import deskWhite from "@/assets/desk-white.jpg";
 import deskTeak from "@/assets/desk-teak.jpg";
+import chairOffice1 from "@/assets/chair-office-1.jpg";
+import chairOffice2 from "@/assets/chair-office-2.jpg";
+import chairOffice3 from "@/assets/chair-office-3.jpg";
 import productListingHero from "@/assets/product-listing-hero.jpg";
 
 export const Route = createFileRoute("/corporate")({
@@ -59,6 +62,14 @@ interface FrameColor {
   id: string;
   label: string;
   colorHex: string;
+}
+
+interface Chair {
+  id: string;
+  label: string;
+  description: string;
+  image: string;
+  price: number;
 }
 
 /* ─────── Customization Options ─────── */
@@ -121,6 +132,30 @@ const frameColors: FrameColor[] = [
   { id: "gunmetal", label: "Gunmetal", colorHex: "#4a4a4a" },
 ];
 
+const chairOptions: Chair[] = [
+  {
+    id: "ergo-mesh-pro",
+    label: "ErgoMesh Pro",
+    description: "Breathable mesh back with adjustable lumbar support",
+    image: chairOffice1,
+    price: 72500,
+  },
+  {
+    id: "executive-one",
+    label: "Executive One",
+    description: "Premium headrest with adjustable armrests",
+    image: chairOffice2,
+    price: 85000,
+  },
+  {
+    id: "task-flex",
+    label: "TaskFlex Workstation",
+    description: "Affordable ergonomic mid-back mesh design",
+    image: chairOffice3,
+    price: 58500,
+  },
+];
+
 function CorporatePage() {
   const navigate = useNavigate();
   const { addItem } = useCart();
@@ -129,6 +164,7 @@ function CorporatePage() {
   const [selectedWood, setSelectedWood] = useState<string>("mahogany");
   const [selectedSize, setSelectedSize] = useState<string>("standard");
   const [selectedFrame, setSelectedFrame] = useState<string>("black");
+  const [selectedChair, setSelectedChair] = useState<string>("ergo-mesh-pro");
   const [quantity, setQuantity] = useState(10);
   const [showAddedNotification, setShowAddedNotification] = useState(false);
 
@@ -136,10 +172,11 @@ function CorporatePage() {
   const wood = woodTypes.find((w) => w.id === selectedWood)!;
   const size = tableSizes.find((s) => s.id === selectedSize)!;
   const frame = frameColors.find((f) => f.id === selectedFrame)!;
+  const chair = chairOptions.find((c) => c.id === selectedChair)!;
 
   const unitPrice = basePrice;
   const totalPrice = unitPrice * quantity;
-  const configSummary = `${wood.label} • ${size.label} (${size.dimensions}) • ${frame.label}`;
+  const configSummary = `${wood.label} • ${size.label} (${size.dimensions}) • ${frame.label}  • ${chair.label}`;
 
   /* ── Handlers ── */
   const handleAddToCart = () => {
@@ -181,6 +218,7 @@ function CorporatePage() {
     setSelectedWood("mahogany");
     setSelectedSize("standard");
     setSelectedFrame("black");
+    setSelectedChair("ergo-mesh-pro");
     setQuantity(10);
   };
 
@@ -397,6 +435,51 @@ function CorporatePage() {
                 ))}
               </div>
             </div>
+
+            {/* ─── CHAIR OPTION ─── */}
+            <div className="space-y-4 pt-4 border-t border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-6 h-6 rounded-full bg-gold/15 flex items-center justify-center text-xs font-bold text-gold">
+                  4
+                </div>
+                <h3 className="text-lg font-bold">Workstation Chair</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {chairOptions.map((chair_opt) => (
+                  <button
+                    key={chair_opt.id}
+                    onClick={() => setSelectedChair(chair_opt.id)}
+                    className={`group relative rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                      selectedChair === chair_opt.id
+                        ? "border-gold ring-2 ring-gold/30 scale-105"
+                        : "border-border hover:border-gold/40"
+                    }`}
+                  >
+                    <div className="relative aspect-square overflow-hidden bg-surface">
+                      <img
+                        src={chair_opt.image}
+                        alt={chair_opt.label}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                    </div>
+                    <div className="p-4 bg-surface border-t border-border">
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-semibold text-foreground text-sm">
+                          {chair_opt.label}
+                        </h4>
+                        {selectedChair === chair_opt.id && (
+                          <Check className="w-4 h-4 text-gold" />
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {chair_opt.description}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* ===== RIGHT: CONFIGURATION SUMMARY ===== */}
@@ -434,6 +517,11 @@ function CorporatePage() {
                 <div className="flex items-start justify-between text-sm">
                   <span className="text-muted-foreground">Frame Color</span>
                   <span className="font-medium text-right">{frame.label}</span>
+                </div>
+
+                <div className="flex items-start justify-between text-sm">
+                  <span className="text-muted-foreground">Chair</span>
+                  <span className="font-medium text-right">{chair.label}</span>
                 </div>
 
                 <div className="pt-3 border-t border-border" />
