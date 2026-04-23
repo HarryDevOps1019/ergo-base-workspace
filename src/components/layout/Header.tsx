@@ -53,12 +53,14 @@ export function Header() {
           BUY
         </span>
         <span className="sm:hidden">📞 FREE WORKSPACE CONSULT</span>
-        <Link
-          to="/consult"
+        <a
+          href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I'd%20like%20to%20book%20a%20free%20workspace%20consultation.`}
+          target="_blank"
+          rel="noopener noreferrer"
           className="ml-3 underline underline-offset-2 hover:no-underline"
         >
           BOOK NOW
-        </Link>
+        </a>
       </div>
 
       {/* Main Navigation */}

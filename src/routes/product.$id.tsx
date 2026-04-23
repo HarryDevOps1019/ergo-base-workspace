@@ -26,6 +26,7 @@ import chairGaming3 from "@/assets/chair-gaming-3.jpg";
 import chairOffice1 from "@/assets/chair-office-1.jpg";
 import chairOffice2 from "@/assets/chair-office-2.jpg";
 import chairOffice3 from "@/assets/chair-office-3.jpg";
+import chairSihooM57Pro from "@/assets/chair-sihoo-m57-pro.png";
 import deskMahogany from "@/assets/desk-mahogany.jpg";
 import deskWhite from "@/assets/desk-white.jpg";
 import deskTeak from "@/assets/desk-teak.jpg";
@@ -244,6 +245,36 @@ const chairsData: Record<string, Product> = {
       "Warranty: 2 Years",
     ],
   },
+  "sihoo-m57-pro": {
+    id: "sihoo-m57-pro",
+    name: "Sihoo M57 Pro Office Chair",
+    tagline: "The gold standard for ergonomic office seating.",
+    subtitle: "Grey Mesh",
+    category: "chair",
+    price: 76500,
+    originalPrice: 89000,
+    images: [chairSihooM57Pro],
+    image: chairSihooM57Pro,
+    rating: 4.9,
+    reviews: 312,
+    color: "Grey Mesh",
+    description:
+      "The Sihoo M57 Pro is widely regarded as one of the best ergonomic office chairs in its class. Featuring a full breathable mesh design, 3D adjustable armrests, and an integrated headrest, it provides exceptional support for long working hours.",
+    features: [
+      "Full Mesh Design",
+      "3D Adjustable Arms",
+      "Integrated Headrest",
+      "Adjustable Lumbar Support",
+      "Double-back Support",
+      "High-Density Mesh",
+    ],
+    specs: [
+      "Max Weight: 150kg",
+      "Height Adjustable: 45-55cm",
+      "Warranty: 2 Years",
+      "Recline: 110-126 degrees",
+    ],
+  },
 };
 
 const desksData: Record<string, Product> = {
@@ -365,6 +396,19 @@ const chairUpgradeOptions: ChairUpgrade[] = [
   { id: "fabric-premium", label: "Premium Fabric", description: "Breathable micro-weave with stain resistance", priceDelta: 6500 },
 ];
 
+const chairColorOptions = [
+  { id: "stealth-black", label: "Stealth Black", colorHex: "#1a1a1a", priceDelta: 0 },
+  { id: "slate-grey", label: "Slate Grey", colorHex: "#4a4a4a", priceDelta: 0 },
+  { id: "arctic-white", label: "Arctic White", colorHex: "#e8e8e8", priceDelta: 3500 },
+  { id: "navy-blue", label: "Navy Blue", colorHex: "#1e3a8a", priceDelta: 2500 },
+];
+
+const chairBaseOptions = [
+  { id: "nylon", label: "Reinforced Nylon", description: "Durable & Lightweight", priceDelta: 0 },
+  { id: "aluminium", label: "Polished Aluminium", description: "Premium Strength", priceDelta: 8500 },
+  { id: "chrome", label: "Chrome Steel", description: "Classic Mirror Finish", priceDelta: 6500 },
+];
+
 const deskAccessories: Accessory[] = [
   {
     id: "cable-tray",
@@ -466,10 +510,10 @@ function ProductCustomizationPage() {
     Record<string, boolean>
   >({});
   const [selectedFrame, setSelectedFrame] = useState<string>(
-    product?.category === "desk" ? deskFrameOptions[0].id : ""
+    product?.category === "desk" ? deskFrameOptions[0].id : chairColorOptions[0].id
   );
   const [selectedSize, setSelectedSize] = useState<string>(
-    product?.category === "desk" ? deskSizeOptions[0].id : ""
+    product?.category === "desk" ? deskSizeOptions[0].id : chairBaseOptions[0].id
   );
   const [showAddedNotification, setShowAddedNotification] = useState(false);
   const [showSpecs, setShowSpecs] = useState(false);
@@ -493,10 +537,14 @@ function ProductCustomizationPage() {
   const isDesk = product.category === "desk";
 
   /* ── Price Calculation ── */
-  const frameOption = deskFrameOptions.find((f) => f.id === selectedFrame);
-  const sizeOption = deskSizeOptions.find((s) => s.id === selectedSize);
-  const frameDelta = isDesk && frameOption ? frameOption.priceDelta : 0;
-  const sizeDelta = isDesk && sizeOption ? sizeOption.priceDelta : 0;
+  const frameOption = isDesk 
+    ? deskFrameOptions.find((f) => f.id === selectedFrame)
+    : chairColorOptions.find((f) => f.id === selectedFrame);
+  const sizeOption = isDesk 
+    ? deskSizeOptions.find((s) => s.id === selectedSize)
+    : chairBaseOptions.find((s) => s.id === selectedSize);
+  const frameDelta = frameOption ? frameOption.priceDelta : 0;
+  const sizeDelta = sizeOption ? sizeOption.priceDelta : 0;
 
   const upgradesTotal = Object.entries(selectedUpgrades)
     .filter(([, v]) => v)
@@ -517,6 +565,9 @@ function ProductCustomizationPage() {
   if (isDesk) {
     if (frameOption) customizationSummary.push(`Frame: ${frameOption.label}`);
     if (sizeOption) customizationSummary.push(`Size: ${sizeOption.dimensions}`);
+  } else {
+    if (frameOption) customizationSummary.push(`Color: ${frameOption.label}`);
+    if (sizeOption) customizationSummary.push(`Base: ${sizeOption.label}`);
   }
   const activeUpgrades = chairUpgradeOptions.filter((u) => selectedUpgrades[u.id]);
   if (activeUpgrades.length > 0) customizationSummary.push(`${activeUpgrades.length} upgrade(s)`);
@@ -725,77 +776,77 @@ function ProductCustomizationPage() {
               </p>
             </div>
 
-            {/* ─── DESK: FRAME COLOR ─── */}
-            {isDesk && (
-              <div className="space-y-3">
-                <label className="text-sm font-semibold block">
-                  Frame Color
-                  {frameOption && frameOption.priceDelta > 0 && (
-                    <span className="text-gold text-xs ml-2">+LKR{frameOption.priceDelta.toLocaleString()}</span>
-                  )}
-                </label>
-                <div className="flex gap-3">
-                  {deskFrameOptions.map((opt) => (
-                    <button
-                      key={opt.id}
-                      onClick={() => setSelectedFrame(opt.id)}
-                      className={`flex flex-col items-center gap-1.5 group transition-all`}
+            {/* ─── DESK & CHAIR: COLOR ─── */}
+            <div className="space-y-3">
+              <label className="text-sm font-semibold block">
+                {isDesk ? "Frame Color" : "Mesh / Fabric Color"}
+                {frameOption && frameOption.priceDelta > 0 && (
+                  <span className="text-gold text-xs ml-2">+LKR{frameOption.priceDelta.toLocaleString()}</span>
+                )}
+              </label>
+              <div className="flex gap-3">
+                {(isDesk ? deskFrameOptions : chairColorOptions).map((opt) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => setSelectedFrame(opt.id)}
+                    className={`flex flex-col items-center gap-1.5 group transition-all`}
+                  >
+                    <div
+                      className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center ${
+                        selectedFrame === opt.id
+                          ? "border-gold ring-2 ring-gold/30 scale-110"
+                          : "border-border hover:border-white/40"
+                      }`}
+                      style={{ backgroundColor: opt.colorHex }}
                     >
-                      <div
-                        className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center ${
-                          selectedFrame === opt.id
-                            ? "border-gold ring-2 ring-gold/30 scale-110"
-                            : "border-border hover:border-white/40"
-                        }`}
-                        style={{ backgroundColor: opt.colorHex }}
-                      >
-                        {selectedFrame === opt.id && (
-                          <Check className="w-4 h-4 text-gold drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]" />
-                        )}
-                      </div>
-                      <span
-                        className={`text-[10px] font-medium transition-colors ${
-                          selectedFrame === opt.id ? "text-gold" : "text-muted-foreground group-hover:text-foreground"
-                        }`}
-                      >
-                        {opt.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ─── DESK: SIZE ─── */}
-            {isDesk && (
-              <div className="space-y-3">
-                <label className="text-sm font-semibold block">Desk Size</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {deskSizeOptions.map((opt) => (
-                    <button
-                      key={opt.id}
-                      onClick={() => setSelectedSize(opt.id)}
-                      className={`p-3 rounded-lg border text-left transition-all ${
-                        selectedSize === opt.id
-                          ? "border-gold bg-gold/5 ring-1 ring-gold/20"
-                          : "border-border hover:border-white/30 bg-surface"
+                      {selectedFrame === opt.id && (
+                        <Check className="w-4 h-4 text-gold drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]" />
+                      )}
+                    </div>
+                    <span
+                      className={`text-[10px] font-medium transition-colors ${
+                        selectedFrame === opt.id ? "text-gold" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold">{opt.label}</span>
-                        {selectedSize === opt.id && <Check className="w-4 h-4 text-gold" />}
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">{opt.dimensions}</p>
-                      {opt.priceDelta !== 0 && (
-                        <p className={`text-[10px] mt-1 font-medium ${opt.priceDelta > 0 ? "text-gold" : "text-emerald-400"}`}>
-                          {opt.priceDelta > 0 ? "+" : ""}LKR{opt.priceDelta.toLocaleString()}
-                        </p>
-                      )}
-                    </button>
-                  ))}
-                </div>
+                      {opt.label}
+                    </span>
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* ─── DESK & CHAIR: SIZE / BASE ─── */}
+            <div className="space-y-3">
+              <label className="text-sm font-semibold block">
+                {isDesk ? "Desk Size" : "Base Material"}
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {(isDesk ? deskSizeOptions : chairBaseOptions).map((opt: any) => (
+                  <button
+                    key={opt.id}
+                    onClick={() => setSelectedSize(opt.id)}
+                    className={`p-3 rounded-lg border text-left transition-all ${
+                      selectedSize === opt.id
+                        ? "border-gold bg-gold/5 ring-1 ring-gold/20"
+                        : "border-border hover:border-white/30 bg-surface"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold">{opt.label}</span>
+                      {selectedSize === opt.id && <Check className="w-4 h-4 text-gold" />}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {isDesk ? opt.dimensions : opt.description}
+                    </p>
+                    {opt.priceDelta !== 0 && (
+                      <p className={`text-[10px] mt-1 font-medium ${opt.priceDelta > 0 ? "text-gold" : "text-emerald-400"}`}>
+                        {opt.priceDelta > 0 ? "+" : ""}LKR{opt.priceDelta.toLocaleString()}
+                      </p>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* ─── CHAIR: UPGRADES ─── */}
             {!isDesk && (
@@ -838,9 +889,8 @@ function ProductCustomizationPage() {
               </div>
             )}
 
-            {/* ─── ADD-ONS (for desks) ─── */}
-            {isDesk && (
-              <div className="space-y-3 border-t border-border pt-6">
+            {/* ─── ADD-ONS & ACCESSORIES ─── */}
+            <div className="space-y-3 border-t border-border pt-6">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-semibold">Add-Ons & Accessories</label>
                   <span className="text-[10px] text-muted-foreground flex items-center gap-1">
@@ -925,7 +975,6 @@ function ProductCustomizationPage() {
                   })}
                 </div>
               </div>
-            )}
 
             {/* ─── QUANTITY ─── */}
             <div className="space-y-3 border-t border-border pt-6">
@@ -955,15 +1004,15 @@ function ProductCustomizationPage() {
                   <span className="text-muted-foreground">Base — {product.name}</span>
                   <span className="font-medium">LKR{product.price.toLocaleString()}</span>
                 </div>
-                {isDesk && frameOption && frameOption.priceDelta > 0 && (
+                {frameOption && frameOption.priceDelta > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Frame: {frameOption.label}</span>
+                    <span className="text-muted-foreground">{isDesk ? "Frame" : "Color"}: {frameOption.label}</span>
                     <span className="text-gold font-medium">+LKR{frameOption.priceDelta.toLocaleString()}</span>
                   </div>
                 )}
-                {isDesk && sizeOption && sizeOption.priceDelta !== 0 && (
+                {sizeOption && sizeOption.priceDelta !== 0 && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Size: {sizeOption.label} ({sizeOption.dimensions})</span>
+                    <span className="text-muted-foreground">{isDesk ? "Size" : "Base"}: {sizeOption.label} {isDesk ? `(${sizeOption.dimensions})` : ""}</span>
                     <span className={`font-medium ${sizeOption.priceDelta > 0 ? "text-gold" : "text-emerald-400"}`}>
                       {sizeOption.priceDelta > 0 ? "+" : ""}LKR{sizeOption.priceDelta.toLocaleString()}
                     </span>
