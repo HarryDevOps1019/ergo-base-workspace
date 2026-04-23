@@ -12,19 +12,16 @@ export function ConsultBanner() {
           Schedule a 1:1 call or WhatsApp chat with our ergonomics team. We'll help you choose the right desk size, configuration, and accessories for your space and body. 100% free — no purchase required.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button variant="gold" size="xl" asChild>
-            <Link to="/consult">SCHEDULE NOW</Link>
-          </Button>
-          <Button variant="whatsapp" size="xl" asChild>
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I'd%20like%20to%20book%20a%20free%20workspace%20consultation.`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              CHAT ON WHATSAPP
-            </a>
-          </Button>
-        </div>
+           <Button variant="whatsapp" size="xl" asChild>
+             <a
+               href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I'd%20like%20to%20book%20a%20free%20workspace%20consultation.`}
+               target="_blank"
+               rel="noopener noreferrer"
+             >
+               BOOK NOW
+             </a>
+           </Button>
+         </div>
       </div>
     </section>
   );
