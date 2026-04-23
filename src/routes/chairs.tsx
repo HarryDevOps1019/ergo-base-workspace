@@ -11,7 +11,6 @@ import chairGaming3 from "@/assets/chair-gaming-3.jpg";
 import chairOffice1 from "@/assets/chair-office-1.jpg";
 import chairOffice2 from "@/assets/chair-office-2.jpg";
 import chairOffice3 from "@/assets/chair-office-3.jpg";
-import chairSihooM57Pro from "@/assets/chair-sihoo-m57-pro.png";
 
 const WHATSAPP_NUMBER = "94777212199";
 
@@ -111,24 +110,6 @@ const chairs = [
       "Flip-Up Arms",
       "Tilt Lock",
       "Breathable Fabric",
-    ],
-  },
-  {
-    id: "sihoo-m57-pro",
-    name: "Sihoo M57 Pro Office Chair",
-    category: "office" as const,
-    price: 76500,
-    originalPrice: 89000,
-    image: chairSihooM57Pro,
-    rating: 4.9,
-    reviews: 312,
-    badge: "Premium Choice",
-    color: "Grey Mesh",
-    features: [
-      "Full Mesh Design",
-      "3D Adjustable Arms",
-      "Integrated Headrest",
-      "Adjustable Lumbar",
     ],
   },
 ];
@@ -389,13 +370,7 @@ function ChairsPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button variant="gold" size="lg" asChild>
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi, I'd like to book a free ergonomic consultation.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              FREE CONSULT
-            </a>
+            <Link to="/consult">FREE CONSULT</Link>
           </Button>
           <Button variant="outline" size="lg" asChild>
             <a
